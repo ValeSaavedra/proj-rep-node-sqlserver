@@ -1,0 +1,88 @@
+const { parse } = require("json2csv");
+
+const sucursalLiteral = (sucu) => {
+  switch (sucu) {
+    case "C":
+      return "Ciudad";
+    case "L":
+      return "Av La Plata";
+    case "T":
+      return "Todas";
+  }
+};
+
+const fechaLiteral = (fec) => {
+  switch (fec) {
+    case "0":
+      return "Hoy";
+    case "1":
+      return "Ayer";
+    case "2":
+      return "Anteayer";
+    case "3":
+      return "Hace 3 Días";
+    case "4":
+      return "Hace 4 Días";
+    case "5":
+      return "Hace 5 Días";
+    case "10":
+      return "Mes Actual";
+    case "30":
+      return "Mes Anterior";
+  }
+};
+
+const conviertoJson2CSV = (j) => {
+  return parse(j, { delimiter: ";" });
+};
+
+const conviertoFecha = () => {
+  const dia = new Date();
+  const year = dia.getFullYear();
+  const month = dia.getMonth() + 1;
+  const monthStr = month.toString().padStart(2, "0");
+  const day = dia.getDate().toString().padStart(2, "0");
+  const hours = dia.getHours().toString().padStart(2, "0");
+  const minutes = dia.getMinutes().toString().padStart(2, "0");
+  return year + monthStr + day + "_" + hours + minutes;
+};
+
+const isFileToday = (fileDateSt) => {
+  const fileDate = parseInt(fileDateSt);
+  const hoy = new Date();
+  const hoyDate = parseInt(
+    hoy.getFullYear().toString() +
+      (hoy.getMonth() + 1).toString().padStart(2, "0") +
+      hoy.getDate().toString().padStart(2, "0")
+  );
+  return fileDate == hoyDate;
+};
+
+const deleteFilesCSV = (ruta) => {
+  const fs = require("fs");
+  const FOLDER_TO_MAP = "../proj-rep-node-sqlserver";
+  const files = fs.readdirSync(FOLDER_TO_MAP);
+
+  files.forEach((file) => {
+    if (
+      file.slice(-3) == "csv" &&
+      !isFileToday(file.slice(-17, -9)) &&
+      ((ruta == "reca" && file.substring(0, 5) == "reca_") ||
+        (ruta == "abo" && file.substring(0, 4) == "abo_") ||
+        (ruta == "recaDos" && file.substring(0, 8) == "recaDos_") ||
+        (ruta == "caja" && file.substring(0, 5) == "caja_") ||
+        (ruta == "abopopu" && file.substring(0, 8) == "abopopu_") ||
+        (ruta == "poli" && file.substring(0, 5) == "poli_"))
+      // ((ruta=="reca" && file.substring(0,5)=="reca_") || (ruta =="abo" && file.substring(0,4))
+    )
+      fs.unlinkSync(file);
+  });
+};
+
+module.exports = {
+  sucursalLiteral,
+  fechaLiteral,
+  conviertoJson2CSV,
+  conviertoFecha,
+  deleteFilesCSV,
+};

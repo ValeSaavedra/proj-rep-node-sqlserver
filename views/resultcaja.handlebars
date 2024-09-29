@@ -1,0 +1,61 @@
+<div class="container-fluid">
+    <div class="row align-items-center">
+        <div class="col-8">
+            <h5 class="text-center">Reporte de Cajas: {{sucursal}}/{{fechalit}}</h5>
+        </div>
+    </div>
+
+    <div class="row align-items-center">
+        <div class="col-8">
+            <div class="row">
+                <div class="col-6">
+                    <table class="table table-hover table-bordered table-striped" style="font-size: small; white-space:nowrap;overflow-x:auto">
+                        <thead class="text-center">
+                            <tr>
+                                <tb>Caja</tb>
+                                <tb>Cajero</tb>
+                                <tb>Fecha</tb>
+                                <tb>Sede</tb>
+                                <tb>Cuentas</tb>
+                                <tb>Cheques</tb>
+                                <tb>DebAut</tb>
+                                <tb>Efvo</tb>
+                                <tb>MP</tb>
+                                <tb>TJ</tb>
+                                <tb>Efy_no</tb>
+                                <tb>Subt_TjD</tb>
+                                <tb>Subt_TjC</tb>
+                                <tb>Subt_TjF</tb>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each data}}
+                            <tr>
+                                <td>{{this.Caja}}</td>
+                                <td>{{this.Cajero}}</td>
+                                <td>{{this.Fecha}}</td>
+                                <td>{{this.Sede}}</td>
+                                <td>{{this.Cuentas}}</td>
+                                <td>{{this.Cheques}}</td>
+                                <td>{{this.DebAut}}</td>
+                                <td>{{this.Efectivo}}</td>
+                                <td>{{this.MercadoPago}}</td>
+                                <td>{{this.Tarjetas}}</td>
+                                <td>{{this.Efy_No}}</td>
+                                <td>{{this.subt_TjD}}</td>
+                                <td>{{this.subt_TjC}}</td>
+                                <td>{{this.subt_TjF}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-l-8 col-xs-8 justify-content-center">
+            <a href="./cajas/descargar/{{archivo}}" class="btn btn-success mt-2 ml-4">Descargar CSV</a>
+        </div>
+    </div>
+</div>

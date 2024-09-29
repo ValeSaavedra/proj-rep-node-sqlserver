@@ -1,0 +1,50 @@
+<div class="container-fluid">
+    <h3 class="text-center text dark">Reporte de Cajas:</h3>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-xs-9 col-md-7 bg-dark pt-5 pb-5 m-2">
+            <form id="formulario" method="post" action="/reportes/cajas">
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="suc" class="text-white">Seleccione Sucursal</label>
+                            <select name="suc" id="suc" class="form-control">
+                                <option value="C">Ciudad</option>
+                                <option value="L">AVLP</option>
+                                <option value="T">Todas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="fechas" class="text-white">Seleccione Fecha:</label>
+                            <select name="fecha" id="fecha" class="form-control">
+                                <option value="0">Hoy</option>
+                                <option value="1">Hace 1 Día</option>
+                                <option value="2">Hace 2 Días</option>
+                                <option value="3">Hace 3 Dias</option>
+                                <option value="4">Hace 4 Días</option>
+                                <option value="5">Hace 5 Días</option>
+                                <option value="10">Mes Actual</option>
+                                <option value="30">Mes Anterior</option>
+                            </select>
+                        </div>                        
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-info btn-block" id="boton" onclick="deshabilitar()">
+                    Enviar
+                </button>
+            </form>
+            <button class="btn btn-primary" type="button" disabled style="display: none;" id="spinnerCarga">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Este proceso puede demorar, aguarde por favor...
+            </button>   
+        </div>
+    </div>
+</div>
+<script>
+    const deshabilitar = () => {
+        document.getElementById("boton").disabled = true;
+        document.getElementById("spinnerCarga").style.display="block";
+        document.getElementById("formulario").submit();
+    }
+</script>
