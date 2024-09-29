@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const { dbConnection } = require("../database/config");
-const { cajasCobros } = require("../models/reportes");
+const { cajasCobros, abonos } = require("../models/reportes");
 const {
   sucursalLiteral,
   fechaLiteral,
@@ -55,4 +55,28 @@ const cajasSP = async (req, res) => {
   }
 };
 
-module.exports = { ingresoCajas, cajasSP, descargoCSV };
+const abonosSP = async (req, res) => {
+  try {
+    const pool = await dbConnection();
+    const result = await pool.execute(abonos);
+    const data = result.recordsets[0];
+    deleteFilesCSV("abo");
+    const csv = conviertoJson2CSV(data);
+    cadenaFec = conviertoFecha();
+    const archivo = `abo_${cadenaFec}.csv`;
+    fs.existsSync(archivo) ? fs.unlinkSync(archivo) : null;
+    fs.writeFile(archivo, csv, (err) => {
+      if (err) throw "Hubo un error al escribir el archivo";
+      console.log(`Se ha escrito el archivo ${archivo}`);
+    });
+    res.render("abonos", {
+      data: data,
+      archivo: archivo,
+    });
+  } catch (e) {
+    console.log(6);
+    res.sendStatus(500).json("Error");
+  }
+};
+
+module.exports = { ingresoCajas, cajasSP, abonosSP, descargoCSV };
