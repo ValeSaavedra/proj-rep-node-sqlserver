@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const { dbConnection } = require("../database/config");
-const { cajasCobros, abonos } = require("../models/reportes");
+const { cajasCobros, abonos, accDeportes } = require("../models/reportes");
 const {
   sucursalLiteral,
   fechaLiteral,
@@ -21,6 +21,18 @@ const descargoCSV = (req, res) => {
 const ingresoCajas = (req, res) => {
   res.render("ingresocaja");
 };
+/*
+const cajasPru = async(req,res)=>{
+  try {
+    const {suc,fecha} = req.body
+    const pool = await dbConnection()
+    const result = await pool
+      .request()
+  } catch(e) {
+    res.sendStatus(500)
+  }
+}
+  */
 const cajasSP = async (req, res) => {
   try {
     const { suc, fecha } = req.body;
@@ -58,8 +70,12 @@ const cajasSP = async (req, res) => {
 const abonosSP = async (req, res) => {
   try {
     const pool = await dbConnection();
-    const result = await pool.execute(abonos);
+    //console.log("pasa por aca");
+    const result = await pool.request().execute(abonos);
+    console.log("pasa por aca");
     const data = result.recordsets[0];
+    console.log("pasa por aca");
+
     deleteFilesCSV("abo");
     const csv = conviertoJson2CSV(data);
     cadenaFec = conviertoFecha();
@@ -69,14 +85,27 @@ const abonosSP = async (req, res) => {
       if (err) throw "Hubo un error al escribir el archivo";
       console.log(`Se ha escrito el archivo ${archivo}`);
     });
+
     res.render("abonos", {
       data: data,
       archivo: archivo,
     });
+
+    //res.end();
   } catch (e) {
     console.log(6);
     res.sendStatus(500).json("Error");
   }
 };
 
-module.exports = { ingresoCajas, cajasSP, abonosSP, descargoCSV };
+const ingresoaccDeportes = (req, res) => {};
+const accDeporteSP = (req, res) => {};
+
+module.exports = {
+  ingresoCajas,
+  cajasSP,
+  abonosSP,
+  ingresoaccDeportes,
+  accDeporteSP,
+  descargoCSV,
+};
