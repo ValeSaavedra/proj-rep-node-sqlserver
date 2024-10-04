@@ -70,7 +70,7 @@ const deleteFilesCSV = (ruta) => {
       ((ruta == "reca" && file.substring(0, 5) == "reca_") ||
         (ruta == "abo" && file.substring(0, 4) == "abo_") ||
         (ruta == "recaDos" && file.substring(0, 8) == "recaDos_") ||
-        (ruta == "caja" && file.substring(0, 5) == "caja_") ||
+        (ruta == "caja" && file.substring(0, 4) == "caja") ||
         (ruta == "abopopu" && file.substring(0, 8) == "abopopu_") ||
         (ruta == "poli" && file.substring(0, 5) == "poli_"))
       // ((ruta=="reca" && file.substring(0,5)=="reca_") || (ruta =="abo" && file.substring(0,4))

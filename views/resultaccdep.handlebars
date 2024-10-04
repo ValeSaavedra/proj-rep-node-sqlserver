@@ -1,0 +1,55 @@
+<div class="container-fluid">
+  <div class="row align-items-center">
+    <div class="col-8 text-center">
+      <h5 class="text-center">Reporte de Últimos Accesos al Club</h5>
+      {{#if long}}{{else}}
+        <span class="text-danger"><b>No hay datos para la consulta</b></span>
+      {{/if}}
+    </div>
+  </div>
+  {{#if long}}
+    <div class="row align-items-center">
+      <div class="col-8">
+        <div class="row">
+          <div class="col-6">
+            <table
+              class="table table-hover table-bordered table-striped"
+              style="font-size: small;white-space:nowrap;overflow-x:auto;"
+            >
+              <thead class="text-center">
+                <tr>
+                  <th>Fecha</th>
+                  <th>Hora</th>
+                  <th>Resultado</th>
+                  <th>Motivo</th>
+                  <th>Acceso</th>
+                  <th>Controlador</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each socio}}
+                  <tr>
+                    <td>{{this.Fecha}}</td>
+                    <td>{{this.Hora}}</td>
+                    <td>{{this.Resultado}}</td>
+                    <td>{{this.Motivo}}</td>
+                    <td>{{this.Acceso}}</td>
+                    <td>{{this.Controlador}}</td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+  <div class="container-fluid">
+    <div class="row align-items-center d-flex">
+      <div class="col-lg-8 col-xs-12 justify-content-center text-center">
+        <A href="/reportes/deportes" class="btn btn-success mt-2 ml-4">Nueva
+          Consulta</A>
+      </div>
+    </div>
+  </div>
+</div>

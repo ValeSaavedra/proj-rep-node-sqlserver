@@ -1,5 +1,7 @@
 const cajasCobros = "CPUJ_ALE_Cajas_Cobros";
 const abonos = "CPUJ_ALE_Cajas_Abonos";
 const accDeportes = "CPUJ_ALE_Cajas_Deportes";
+const recau = "CPUJ_ALE_Cajas_Reca";
+const accesos = "CPUJ_ALE_Cajas_Accesos";
 
-module.exports = { cajasCobros, abonos, accDeportes };
+module.exports = { cajasCobros, abonos, accDeportes, recau, accesos };
