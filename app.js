@@ -31,12 +31,12 @@ app.use("/reportes", reportes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  res.sendStatus(400);
+  res.sendStatus(404);
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-  res.sendStatus(599);
+  res.sendStatus(500);
 });
 
 module.exports = app;

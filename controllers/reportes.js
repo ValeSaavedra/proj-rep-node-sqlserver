@@ -1,7 +1,13 @@
 const fs = require("fs");
 const path = require("path");
 const { dbConnection } = require("../database/config");
-const { cajasCobros, abonos, accDeportes } = require("../models/reportes");
+const {
+  cajasCobros,
+  abonos,
+  accDeportes,
+  recau,
+  accesos,
+} = require("../models/reportes");
 const {
   sucursalLiteral,
   fechaLiteral,
@@ -98,14 +104,60 @@ const abonosSP = async (req, res) => {
   }
 };
 
-const ingresoaccDeportes = (req, res) => {};
-const accDeporteSP = (req, res) => {};
+const ingresoaccDeportes = (req, res) => {
+  res.render("ingresoaccdep");
+};
+const accDeportesSP = async (req, res) => {
+  try {
+    const { dato } = req.body;
+    const pool = await dbConnection();
+    const result = await pool
+      .request()
+      .input("IN_Soc_DNI", dato)
+      .execute(accDeportes);
+    const socio = result.recordsets[0];
+    let long = socio.length;
+    long !== 0 ? (long = 1) : null;
+    res.render("resultaccdep", { socio: socio, long: long });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500).json("Error");
+  }
+};
+const ingresoaccesos = (req, res) => {
+  res.render("ingresoaccesos");
+};
+const accesosSP = async (req, res) => {
+  try {
+    const { dato } = req.body;
+    const pool = await dbConnection();
+    const result = await pool
+      .request()
+      .input("IN_Soc_DNI", dato)
+      .execute(accesos);
+    const socio = result.recordsets[0];
+    let long = socio.length;
+    console.log(`long tiene una longitud de ${long}`);
+    long !== 0 ? (long = 1) : null;
+    console.log("long tiene", long);
+    res.render("resultaccesos", { socio: socio, long: long });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500).json("Error");
+  }
+};
+
+const recaSP = (req, res) => {};
 
 module.exports = {
   ingresoCajas,
   cajasSP,
   abonosSP,
   ingresoaccDeportes,
-  accDeporteSP,
+  ingresoaccesos,
+  accDeportesSP,
+  ingresoCajas,
+  accesosSP,
+  recaSP,
   descargoCSV,
 };

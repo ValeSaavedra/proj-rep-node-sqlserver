@@ -1,0 +1,28 @@
+<div class="container-fluid">
+  <h3 class="text-center text-dark mt-2">Reporte de Últimos Accesos al Club</h3>
+  <div class="row justify-content-center align-items-center">
+    <div class="col-lg-5 col-xs-9 bg-dark py-5 m-2">
+      <form id="formAccDeportes" action="/reportes/deportes" method="post">
+        <div class="row justify-content-center">
+          <div class="col-lg-5 col-xs-12">
+            <div class="form-group">
+              <label for="dato" class="text-white">Ingrese NRO SOCIO o DNI</label>
+              <input
+                type="text"
+                name="dato"
+                id="dato"
+                class="form-control"
+                autofocus
+              />
+            </div>
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="btn btn-block btn-info"
+          id="boton"
+        >Enviar</button>
+      </form>
+    </div>
+  </div>
+</div>
