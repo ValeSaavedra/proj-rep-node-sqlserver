@@ -147,7 +147,29 @@ const accesosSP = async (req, res) => {
   }
 };
 
-const recaSP = (req, res) => {};
+const recaSP = async (req, res) => {
+  try {
+    const pool = await dbConnection();
+    const result = await pool.request().execute(recau);
+    const data = result.recordsets[0];
+    console.log("result.recordset[0].Precio da ", result.recordset[0].Precio);
+    // if result.recordset[0].Precio is null, no hay evento activo
+    if (data.length == 0) console.log("No hay evento activo", data.length);
+    deleteFilesCSV("reca");
+    const csv = conviertoJson2CSV(data);
+    const cadenaFec = conviertoFecha();
+    const archivo = `reca_${cadenaFec}.csv`;
+    fs.existsSync(archivo) ? fs.unlinkSync(archivo) : null;
+    fs.writeFile(archivo, csv, (err) => {
+      if (err) throw "Hubo un error al escribir el archivo";
+      console.log(`Se ha escrito el archivo ${archivo}`);
+    });
+    res.render("reca", { data: data, archivo: archivo });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500).json("Error");
+  }
+};
 
 module.exports = {
   ingresoCajas,

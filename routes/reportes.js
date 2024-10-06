@@ -9,11 +9,13 @@ const {
   accDeportesSP,
   ingresoaccesos,
   accesosSP,
+  recaSP,
 } = require("../controllers/reportes");
 const { validateNum } = require("../middlewares/actions/accessNum");
 
 router.get("/cajas/descargar/:archivo", descargoCSV);
 router.get("/abonos/descargar/:archivo", descargoCSV);
+router.get("/reca/descargar/:archivo", descargoCSV);
 router.post("/deportes", validateNum, accDeportesSP);
 router.post("/accesos", validateNum, accesosSP);
 router.post("/cajas", cajasSP);
@@ -22,5 +24,6 @@ router.get("/cajas", ingresoCajas);
 router.get("/abonos", abonosSP);
 router.get("/deportes", ingresoaccDeportes);
 router.get("/accesos", ingresoaccesos);
+router.get("/reca", recaSP);
 
 module.exports = router;
