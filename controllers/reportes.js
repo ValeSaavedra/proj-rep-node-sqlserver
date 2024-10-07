@@ -9,6 +9,7 @@ const {
   accesos,
   abopopu,
   poli,
+  recau2,
 } = require("../models/reportes");
 const {
   sucursalLiteral,
@@ -217,6 +218,22 @@ const poliSP = async (req, res) => {
   }
 };
 
+const reca2SP = async (req, res) => {
+  const pool = await dbConnection();
+  const result = await pool.request().execute(recau2);
+  const data = result.recordsets[0];
+  deleteFilesCSV("recaDos");
+  const csv = conviertoJson2CSV(data);
+  const cadenaFec = conviertoFecha();
+  const archivo = `recaDos_${cadenaFec}.csv`;
+  fs.existsSync(archivo) ? fs.unlinkSync(archivo) : null;
+  fs.writeFile(archivo, csv, (err) => {
+    if (err) throw "Hubo un error al escribir el archivo";
+    console.log(`Se escribió el archivo ${archivo}`);
+  });
+  res.render("reca2", { data: data, archivo: archivo });
+};
+
 module.exports = {
   ingresoCajas,
   cajasSP,
@@ -229,5 +246,6 @@ module.exports = {
   recaSP,
   abopopuSP,
   poliSP,
+  reca2SP,
   descargoCSV,
 };
