@@ -7,6 +7,7 @@ const {
   accDeportes,
   recau,
   accesos,
+  abopopu,
 } = require("../models/reportes");
 const {
   sucursalLiteral,
@@ -15,6 +16,7 @@ const {
   conviertoJson2CSV,
 } = require("../utils/scripts");
 const { conviertoFecha } = require("../utils/scripts");
+const { execFileSync } = require("child_process");
 
 const descargoCSV = (req, res) => {
   const { archivo } = req.params;
@@ -171,6 +173,27 @@ const recaSP = async (req, res) => {
   }
 };
 
+const abopopuSP = async (req, res) => {
+  try {
+    const pool = await dbConnection();
+    const result = await pool.request().execute(abopopu);
+    const data = result.recordsets[0];
+    deleteFilesCSV("abopopu");
+    const csv = conviertoJson2CSV(data);
+    const cadenaFec = conviertoFecha();
+    const archivo = `abopopu_${cadenaFec}.csv`;
+    fs.existsSync(archivo) ? fs.unlinkSync(archivo) : null;
+    fs.writeFile(archivo, csv, (err) => {
+      if (err) throw "Hubo un error al escribir el archivo";
+      console.log(`Se escribió el archivo ${archivo}`);
+    });
+    res.render("abopopu", { data: data, archivo: archivo });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500).js("Error");
+  }
+};
+
 module.exports = {
   ingresoCajas,
   cajasSP,
@@ -181,5 +204,6 @@ module.exports = {
   ingresoCajas,
   accesosSP,
   recaSP,
+  abopopuSP,
   descargoCSV,
 };
