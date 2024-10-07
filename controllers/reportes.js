@@ -8,6 +8,7 @@ const {
   recau,
   accesos,
   abopopu,
+  poli,
 } = require("../models/reportes");
 const {
   sucursalLiteral,
@@ -17,6 +18,7 @@ const {
 } = require("../utils/scripts");
 const { conviertoFecha } = require("../utils/scripts");
 const { execFileSync } = require("child_process");
+const { json } = require("express");
 
 const descargoCSV = (req, res) => {
   const { archivo } = req.params;
@@ -190,7 +192,28 @@ const abopopuSP = async (req, res) => {
     res.render("abopopu", { data: data, archivo: archivo });
   } catch (e) {
     console.log(e);
-    res.sendStatus(500).js("Error");
+    res.sendStatus(500).json("Error");
+  }
+};
+
+const poliSP = async (req, res) => {
+  try {
+    const pool = await dbConnection();
+    const result = await pool.request().execute(poli);
+    const data = result.recordsets[0];
+    deleteFilesCSV("poli");
+    const csv = conviertoJson2CSV(data);
+    const cadenaFec = conviertoFecha();
+    const archivo = `poli_${cadenaFec}.csv`;
+    fs.existsSync(archivo) ? fs.unlinkSync(archivo) : null;
+    fs.writeFile(archivo, csv, (err) => {
+      if (err) throw "Hubo un error al escribir el archivo";
+      console.log(`Se ha escrito el archivo ${archivo}`);
+    });
+    res.render("poli", { data: data, archivo: archivo });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500).json("Error");
   }
 };
 
@@ -205,5 +228,6 @@ module.exports = {
   accesosSP,
   recaSP,
   abopopuSP,
+  poliSP,
   descargoCSV,
 };
