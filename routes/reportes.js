@@ -13,6 +13,7 @@ const {
   abopopuSP,
   poliSP,
   reca2SP,
+  recaPoliSP,
 } = require("../controllers/reportes");
 const { validateNum } = require("../middlewares/actions/accessNum");
 
@@ -22,6 +23,7 @@ router.get("/reca/descargar/:archivo", descargoCSV);
 router.get("/abopopu/descargar/:archivo", descargoCSV);
 router.get("/poli/descargar/:archivo", descargoCSV);
 router.get("/reca2/descargar/:archivo", descargoCSV);
+router.get("/recapoli/descargar/:archivo", descargoCSV);
 router.post("/deportes", validateNum, accDeportesSP);
 router.post("/accesos", validateNum, accesosSP);
 router.post("/cajas", cajasSP);
@@ -34,5 +36,6 @@ router.get("/reca", recaSP);
 router.get("/abopopu", abopopuSP);
 router.get("/poli", poliSP);
 router.get("/reca2", reca2SP);
+router.get("/recapoli", recaPoliSP);
 
 module.exports = router;

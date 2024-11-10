@@ -72,7 +72,8 @@ const deleteFilesCSV = (ruta) => {
         (ruta == "recaDos" && file.substring(0, 8) == "recaDos_") ||
         (ruta == "caja" && file.substring(0, 4) == "caja") ||
         (ruta == "abopopu" && file.substring(0, 8) == "abopopu_") ||
-        (ruta == "poli" && file.substring(0, 5) == "poli_"))
+        (ruta == "poli" && file.substring(0, 5) == "poli_") ||
+        (ruta == "recaPoli" && file.substring(0, 9) == "recaPoli_"))
       // ((ruta=="reca" && file.substring(0,5)=="reca_") || (ruta =="abo" && file.substring(0,4))
     )
       fs.unlinkSync(file);

@@ -10,6 +10,7 @@ const {
   abopopu,
   poli,
   recau2,
+  recauPoli,
 } = require("../models/reportes");
 const {
   sucursalLiteral,
@@ -20,6 +21,7 @@ const {
 const { conviertoFecha } = require("../utils/scripts");
 const { execFileSync } = require("child_process");
 const { json } = require("express");
+const { date } = require("joi");
 
 const descargoCSV = (req, res) => {
   const { archivo } = req.params;
@@ -234,6 +236,22 @@ const reca2SP = async (req, res) => {
   res.render("reca2", { data: data, archivo: archivo });
 };
 
+const recaPoliSP = async (req, res) => {
+  const pool = await dbConnection();
+  const result = await pool.request().execute(recauPoli);
+  const data = result.recordsets[0];
+  deleteFilesCSV("recaPoli");
+  const csv = conviertoJson2CSV(data);
+  const cadenaFec = conviertoFecha();
+  const archivo = `recaPoli_${cadenaFec}.csv`;
+  fs.existsSync(archivo) ? fs.unlinkSync(archivo) : null;
+  fs.writeFile(archivo, csv, (err) => {
+    if (err) throw "Hubo un error al escribir el archivo";
+    console.log(`Se escribió el archivo ${archivo}`);
+  });
+  res.render("recapoli", { data: data, archivo: archivo });
+};
+
 module.exports = {
   ingresoCajas,
   cajasSP,
@@ -247,5 +265,6 @@ module.exports = {
   abopopuSP,
   poliSP,
   reca2SP,
+  recaPoliSP,
   descargoCSV,
 };
