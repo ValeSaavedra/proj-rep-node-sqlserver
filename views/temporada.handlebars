@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row align-items-center">
     <div class="col-8 text-center">
-      <h5 class="text-center">Reporte de Recaudación</h5>
+      <h5 class="text-center">Reporte de Temporada</h5>
     </div>
   </div>
   <div class="row align-items-center">
@@ -14,21 +14,21 @@
           >
             <thead>
               <tr>
-                <th class="text-center">Bandeja</th>
-                <th class="text-center">Evento_Tarifa</th>
-                <th class="text-center">Precio</th>
-                <th class="text-center">Entradas</th>
-                <th class="text-center">Final</th>
+                <th class="text-center">Mov</th>
+                <th class="text-center">Total</th>
+                <th class="text-center">Fecha</th>
+                <th class="text-center">Descripcion_Detallada</th>
+                <th class="text-center">Imp_Final</th>
               </tr>
             </thead>
             <tbody>
               {{#each data}}
                 <tr>
-                  <td>{{this.Bandeja}}</td>
-                  <td>{{this.Tarifa}}</td>
-                  <td align="right">{{this.Precio}}</td>
-                  <td align="right">{{this.Entradas}}</td>
-                  <td align="right">{{this.Final}}</td>
+                  <td align="right">{{this.Mov}}</td>
+                  <td align="right">{{this.Total}}</td>
+                  <td>{{this.Fecha}}</td>
+                  <td>{{this.Descripcion_Detallada}}</td>
+                  <td align="right">{{this.Imp_Final}}</td>
                 </tr>
               {{/each}}
             </tbody>
@@ -40,7 +40,7 @@
   <div class="row align-items-center">
     <div class="col-lg-8 col-xs-8 justify-content-center">
       <a
-        href="./reca/descargar/{{archivo}}"
+        href="./temporada/descargar/{{archivo}}"
         class="btn btn-success mt-2 ml-4"
       >Descargar CSV</a>
     </div>

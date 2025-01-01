@@ -14,6 +14,8 @@ const {
   poliSP,
   reca2SP,
   recaPoliSP,
+  coloniaSP,
+  temporadaSP,
 } = require("../controllers/reportes");
 const { validateNum } = require("../middlewares/actions/accessNum");
 
@@ -24,6 +26,8 @@ router.get("/abopopu/descargar/:archivo", descargoCSV);
 router.get("/poli/descargar/:archivo", descargoCSV);
 router.get("/reca2/descargar/:archivo", descargoCSV);
 router.get("/recapoli/descargar/:archivo", descargoCSV);
+router.get("/colonia/descargar/:archivo", descargoCSV);
+router.get("/temporada/descargar/:archivo", descargoCSV);
 router.post("/deportes", validateNum, accDeportesSP);
 router.post("/accesos", validateNum, accesosSP);
 router.post("/cajas", cajasSP);
@@ -37,5 +41,7 @@ router.get("/abopopu", abopopuSP);
 router.get("/poli", poliSP);
 router.get("/reca2", reca2SP);
 router.get("/recapoli", recaPoliSP);
+router.get("/colonia", coloniaSP);
+router.get("/temporada", temporadaSP);
 
 module.exports = router;

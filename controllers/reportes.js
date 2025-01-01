@@ -11,6 +11,8 @@ const {
   poli,
   recau2,
   recauPoli,
+  colonia,
+  temporada,
 } = require("../models/reportes");
 const {
   sucursalLiteral,
@@ -19,9 +21,9 @@ const {
   conviertoJson2CSV,
 } = require("../utils/scripts");
 const { conviertoFecha } = require("../utils/scripts");
-const { execFileSync } = require("child_process");
-const { json } = require("express");
-const { date } = require("joi");
+//const { execFileSync } = require("child_process");
+//const { json } = require("express");
+//const { date } = require("joi");
 
 const descargoCSV = (req, res) => {
   const { archivo } = req.params;
@@ -251,7 +253,37 @@ const recaPoliSP = async (req, res) => {
   });
   res.render("recapoli", { data: data, archivo: archivo });
 };
+const coloniaSP = async (req, res) => {
+  const pool = await dbConnection();
+  const result = await pool.request().execute(colonia);
+  const data = result.recordsets[0];
+  deleteFilesCSV("colonia");
+  const csv = conviertoJson2CSV(data);
+  const cadenaFec = conviertoFecha();
+  const archivo = `colonia_${cadenaFec}.csv`;
+  fs.existsSync(archivo) ? fs.unlinkSync(archivo) : null;
+  fs.writeFile(archivo, csv, (err) => {
+    if (err) throw "Hubo un error al escribir el archivo";
+    console.log(`Se escribió el archivo ${archivo}`);
+  });
+  res.render("colonia", { data: data, archivo: archivo });
+};
 
+const temporadaSP = async (req, res) => {
+  const pool = await dbConnection();
+  const result = await pool.request().execute(temporada);
+  const data = result.recordsets[0];
+  deleteFilesCSV("temporada");
+  const csv = conviertoJson2CSV(data);
+  const cadenaFec = conviertoFecha();
+  const archivo = `temporada_${cadenaFec}.csv`;
+  fs.existsSync(archivo) ? fs.unlinkSync(archivo) : null;
+  fs.writeFile(archivo, csv, (err) => {
+    if (err) throw "Hubo un error al escribir el archivo";
+    console.log(`Se escribió el archivo ${archivo}`);
+  });
+  res.render("temporada", { data: data, archivo: archivo });
+};
 module.exports = {
   ingresoCajas,
   cajasSP,
@@ -266,5 +298,7 @@ module.exports = {
   poliSP,
   reca2SP,
   recaPoliSP,
+  coloniaSP,
+  temporadaSP,
   descargoCSV,
 };
