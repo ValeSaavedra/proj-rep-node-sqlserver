@@ -13,6 +13,7 @@ const {
   recauPoli,
   colonia,
   temporada,
+  copaArg,
 } = require("../models/reportes");
 const {
   sucursalLiteral,
@@ -127,6 +128,7 @@ const accDeportesSP = async (req, res) => {
     const socio = result.recordsets[0];
     let long = socio.length;
     long !== 0 ? (long = 1) : null;
+    console.log(socio)
     res.render("resultaccdep", { socio: socio, long: long });
   } catch (e) {
     console.log(e);
@@ -284,6 +286,53 @@ const temporadaSP = async (req, res) => {
   });
   res.render("temporada", { data: data, archivo: archivo });
 };
+
+const ingresoCopaArg = (req, res)=>{
+  res.render("ingresocopaarg")
+}
+const ingresoCopaArg2 = (req,res)=>{
+  res.render("ingresocopaarg2")
+}
+const copaArgSP = async(req,res)=>{
+  try{
+    const {dato} = req.body
+    const pool=await dbConnection()
+    const result=await pool
+      .request()
+      .input("IN_QR",dato)
+      .execute(copaArg)
+    const qr=result.recordsets[0]
+    console.log(qr)
+    let long = qr.length
+    long!==0 ? long=1 : null
+    console.log("pasa por aca")
+    console.log(long)
+    res.render("resultcopaarg",{ qr: qr,long: long })  
+
+  } catch(e) {
+    console.log(e)
+    res.status(500).json("Error")
+  }
+}
+const copaArg2SP = async(req,res) =>{
+  try {
+    const {dato} = req.body
+    const pool = await dbConnection()
+    const result = await pool
+      .request()
+      .input("IN_QR",dato)
+      .execute(copaArg)
+    const qr = result.recordsets[0]
+    console.log(qr)
+    let long = qr.length
+    long!==0 ? long=1 : null
+    res.render("resultcopaarg2",{ qr: qr, long: long})
+
+  } catch(e){
+    console.log(e)
+    res.status(500).json("Error") 
+  }
+}
 module.exports = {
   ingresoCajas,
   cajasSP,
@@ -301,4 +350,8 @@ module.exports = {
   coloniaSP,
   temporadaSP,
   descargoCSV,
+  ingresoCopaArg,
+  ingresoCopaArg2,
+  copaArgSP,
+  copaArg2SP,
 };

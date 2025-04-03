@@ -12,4 +12,10 @@ const validateNum = (req, res, next) => {
   error ? res.redirect(req.originalUrl) : next();
 };
 
-module.exports = { validateNum };
+const validateQR = (req,res,next)=> {
+  const {error,value} = schemas.qr.validate(req.body)
+ // const {dato} = req.body
+  error ? res.redirect(req.originalUrl): next()
+}
+
+module.exports = { validateNum,validateQR };

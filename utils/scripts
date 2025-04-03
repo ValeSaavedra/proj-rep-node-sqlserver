@@ -59,6 +59,7 @@ const isFileToday = (fileDateSt) => {
 };
 
 const deleteFilesCSV = (ruta) => {
+  /*
   const fs = require("fs");
   const FOLDER_TO_MAP = "../proj-rep-node-sqlserver";
   const files = fs.readdirSync(FOLDER_TO_MAP);
@@ -81,7 +82,7 @@ const deleteFilesCSV = (ruta) => {
     )
       fs.unlinkSync(file);
   });
-};
+*/};
 
 module.exports = {
   sucursalLiteral,

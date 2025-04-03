@@ -1,5 +1,5 @@
 {
-  "name": "reportes",
+  "name": "reportes",  
   "description": "Reportes consumiendo SPs de DB en SqlServer",
   "version": "1.0.0",
   "private": true,
