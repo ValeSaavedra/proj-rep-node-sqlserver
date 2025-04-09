@@ -58,24 +58,34 @@ const cajasSP = async (req, res) => {
       .input("IN_Sucursal", suc)
       .input("IN_Fechas", fecha)
       .execute(cajasCobros);
-    const data = result.recordsets[0];
+    const data = result.recordsets[0];    
     //manejo de archivo para descargar
     const sucursal = sucursalLiteral(suc);
     const fechaLit = fechaLiteral(fecha);
     deleteFilesCSV("caja");
-    const csv = conviertoJson2CSV(data);
-    const cadenaFec = conviertoFecha();
-    const archivo = `caja${sucursal}${fechaLit}_${cadenaFec}.csv`;
-    fs.existsSync(archivo) ? fs.unlinkSync(archivo) : null;
-    fs.writeFile(archivo, csv, (err) => {
-      if (err) throw "Hubo un error al escribir el archivo";
-      console.log(`Se ha escrito el archivo ${archivo}`);
-    });
+    let long = data.length;
+    console.log(`long tiene una longitud de ${long}`)
+    long !== 0 ? (long = 1) : null;
+    let archivo=""
+    if (long==1) {
+      const csv = conviertoJson2CSV(data);
+      const cadenaFec = conviertoFecha();
+      let archivo = `caja${sucursal}${fechaLit}_${cadenaFec}.csv`;
+      console.log(`long es ${long}`)
+      console.log(`en archivo tengo ${archivo}`)
+      fs.existsSync(archivo) ? fs.unlinkSync(archivo) : null;
+      fs.writeFile(archivo, csv, (err) => {
+        if (err) throw "Hubo un error al escribir el archivo";
+        console.log(`Se ha escrito el archivo ${archivo}`);
+
+      });
+    }
     res.render("resultcaja", {
       data: data,
       sucursal: sucursal,
       fechaLit: fechaLit,
       archivo: archivo,
+      long: long,
     });
   } catch (error) {
     console.log(error);

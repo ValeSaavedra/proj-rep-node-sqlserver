@@ -4,7 +4,14 @@
       <h5 class="text-center">Reporte de Cajas: {{sucursal}}/{{fechaLit}}</h5>
     </div>
   </div>
-
+      {{#if long}}{{else}}
+        <div class="row align-items-center" >
+          <div class="col-8">
+            <h5 class="text-danger text-center"><b>No hay datos para la consulta</b></h5>
+          </div>
+        </div>
+      {{/if}}
+  {{#if long}}
   <div class="row align-items-center">
     <div class="col-8">
       <div class="row">
@@ -64,4 +71,5 @@
       >Descargar CSV</a>
     </div>
   </div>
+  {{/if}}
 </div>
