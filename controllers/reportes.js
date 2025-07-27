@@ -28,6 +28,7 @@ const { conviertoFecha } = require("../utils/scripts");
 
 const descargoCSV = (req, res) => {
   const { archivo } = req.params;
+  console.log("archivo",archivo)
   const filePath = path.join(__dirname, archivo);
   const arrPath = filePath.split("controllers");
   const filePathOK = arrPath[0] + arrPath[1];
@@ -68,6 +69,7 @@ const cajasSP = async (req, res) => {
     long !== 0 ? (long = 1) : null;
     let archivo=""
     if (long==1) {
+      console.log("long es igual a 1, entra al if")
       const csv = conviertoJson2CSV(data);
       const cadenaFec = conviertoFecha();
       let archivo = `caja${sucursal}${fechaLit}_${cadenaFec}.csv`;
@@ -79,14 +81,22 @@ const cajasSP = async (req, res) => {
         console.log(`Se ha escrito el archivo ${archivo}`);
 
       });
+      res.render("resultcaja", {
+        data: data,
+        sucursal: sucursal,
+        fechaLit: fechaLit,
+        archivo: archivo,
+        long: long,
+      })
     }
-    res.render("resultcaja", {
-      data: data,
-      sucursal: sucursal,
-      fechaLit: fechaLit,
-      archivo: archivo,
-      long: long,
-    });
+    else {
+      res.render("resultcaja",{
+        sucursal: sucursal,
+        fechaLit: fechaLit,
+        long: long,
+      })
+
+    }
   } catch (error) {
     console.log(error);
     res.sendStatus(500).json(error);
