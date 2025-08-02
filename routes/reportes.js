@@ -34,7 +34,8 @@ router.get("/colonia/descargar/:archivo", descargoCSV);
 router.get("/temporada/descargar/:archivo", descargoCSV);
 router.post("/deportes", validateNum, accDeportesSP);
 router.post("/accesos", validateNum, accesosSP);
-router.post("/copaarg",validateQR, copaArgSP)
+//router.post("/copaarg",validateQR, copaArgSP)
+router.post("/copaarg", copaArgSP)
 router.post("/copaarg2",validateQR,copaArg2SP)
 router.post("/cajas", cajasSP);
 router.post("/deportes", accDeportesSP);
