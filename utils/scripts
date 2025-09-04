@@ -57,7 +57,24 @@ const isFileToday = (fileDateSt) => {
   );
   return fileDate == hoyDate;
 };
+const countCSV = () => {
+  // copio esta función para hacerla directo en controller - por ello nunca la llamo
+  const fs = require("fs");
+  const FOLDER_TO_MAP = "../proj-rep-node-sqlserver";
+  const files = fs.readdirSync(FOLDER_TO_MAP);
 
+  const conteo = files.reduce((acc, file) => {
+    if (file.endsWith(".csv")) {
+      const grupo = file.split("_")[0];
+
+      // si acc[grupo] es undefined o null → usa 0
+      acc[grupo] = (acc[grupo] ?? 0) + 1;
+    }
+    return acc;
+  }, {});
+  //});
+  //return conteo;
+};
 const deleteFilesCSV = (ruta) => {
   /*
   const fs = require("fs");
@@ -82,7 +99,8 @@ const deleteFilesCSV = (ruta) => {
     )
       fs.unlinkSync(file);
   });
-*/};
+*/
+};
 
 module.exports = {
   sucursalLiteral,
@@ -90,4 +108,5 @@ module.exports = {
   conviertoJson2CSV,
   conviertoFecha,
   deleteFilesCSV,
+  countCSV,
 };

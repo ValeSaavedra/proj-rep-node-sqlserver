@@ -22,13 +22,35 @@ const {
   conviertoJson2CSV,
 } = require("../utils/scripts");
 const { conviertoFecha } = require("../utils/scripts");
+
+const { countCSV } = require("../utils/scripts");
 //const { execFileSync } = require("child_process");
 //const { json } = require("express");
 //const { date } = require("joi");
 
+const countSP = (req, res) => {
+  //console.log(countCSV);
+  const fs = require("fs");
+  const FOLDER_TO_MAP = "../proj-rep-node-sqlserver";
+  const files = fs.readdirSync(FOLDER_TO_MAP);
+
+  const conteo = files.reduce((acc, file) => {
+    if (file.endsWith(".csv")) {
+      const grupo = file.split("_")[0];
+
+      // si acc[grupo] es undefined o null → usa 0
+      acc[grupo] = (acc[grupo] ?? 0) + 1;
+    }
+    return acc;
+  }, {});
+  console.log(conteo);
+  console.log(conteo.reca);
+  res.send(conteo);
+};
+
 const descargoCSV = (req, res) => {
   const { archivo } = req.params;
-  console.log("archivo",archivo)
+  console.log("archivo", archivo);
   const filePath = path.join(__dirname, archivo);
   const arrPath = filePath.split("controllers");
   const filePathOK = arrPath[0] + arrPath[1];
@@ -59,27 +81,26 @@ const cajasSP = async (req, res) => {
       .input("IN_Sucursal", suc)
       .input("IN_Fechas", fecha)
       .execute(cajasCobros);
-    const data = result.recordsets[0];    
+    const data = result.recordsets[0];
     //manejo de archivo para descargar
     const sucursal = sucursalLiteral(suc);
     const fechaLit = fechaLiteral(fecha);
     deleteFilesCSV("caja");
     let long = data.length;
-    console.log(`long tiene una longitud de ${long}`)
+    console.log(`long tiene una longitud de ${long}`);
     long !== 0 ? (long = 1) : null;
-    let archivo=""
-    if (long==1) {
-      console.log("long es igual a 1, entra al if")
+    let archivo = "";
+    if (long == 1) {
+      console.log("long es igual a 1, entra al if");
       const csv = conviertoJson2CSV(data);
       const cadenaFec = conviertoFecha();
       let archivo = `caja${sucursal}${fechaLit}_${cadenaFec}.csv`;
-      console.log(`long es ${long}`)
-      console.log(`en archivo tengo ${archivo}`)
+      console.log(`long es ${long}`);
+      console.log(`en archivo tengo ${archivo}`);
       fs.existsSync(archivo) ? fs.unlinkSync(archivo) : null;
       fs.writeFile(archivo, csv, (err) => {
         if (err) throw "Hubo un error al escribir el archivo";
         console.log(`Se ha escrito el archivo ${archivo}`);
-
       });
       res.render("resultcaja", {
         data: data,
@@ -87,15 +108,13 @@ const cajasSP = async (req, res) => {
         fechaLit: fechaLit,
         archivo: archivo,
         long: long,
-      })
-    }
-    else {
-      res.render("resultcaja",{
+      });
+    } else {
+      res.render("resultcaja", {
         sucursal: sucursal,
         fechaLit: fechaLit,
         long: long,
-      })
-
+      });
     }
   } catch (error) {
     console.log(error);
@@ -148,7 +167,7 @@ const accDeportesSP = async (req, res) => {
     const socio = result.recordsets[0];
     let long = socio.length;
     long !== 0 ? (long = 1) : null;
-    console.log(socio)
+    console.log(socio);
     res.render("resultaccdep", { socio: socio, long: long });
   } catch (e) {
     console.log(e);
@@ -307,52 +326,44 @@ const temporadaSP = async (req, res) => {
   res.render("temporada", { data: data, archivo: archivo });
 };
 
-const ingresoCopaArg = (req, res)=>{
-  res.render("ingresocopaarg")
-}
-const ingresoCopaArg2 = (req,res)=>{
-  res.render("ingresocopaarg2")
-}
-const copaArgSP = async(req,res)=>{
-  try{
-    const {dato} = req.body
-    const pool=await dbConnection()
-    const result=await pool
-      .request()
-      .input("IN_QR",dato)
-      .execute(copaArg)
-    const qr=result.recordsets[0]
-    console.log(qr)
-    let long = qr.length
-    long!==0 ? long=1 : null
-    console.log("pasa por aca")
-    console.log(long)
-    res.render("resultcopaarg",{ qr: qr,long: long })  
-
-  } catch(e) {
-    console.log(e)
-    res.status(500).json("Error")
-  }
-}
-const copaArg2SP = async(req,res) =>{
+const ingresoCopaArg = (req, res) => {
+  res.render("ingresocopaarg");
+};
+const ingresoCopaArg2 = (req, res) => {
+  res.render("ingresocopaarg2");
+};
+const copaArgSP = async (req, res) => {
   try {
-    const {dato} = req.body
-    const pool = await dbConnection()
-    const result = await pool
-      .request()
-      .input("IN_QR",dato)
-      .execute(copaArg)
-    const qr = result.recordsets[0]
-    console.log(qr)
-    let long = qr.length
-    long!==0 ? long=1 : null
-    res.render("resultcopaarg2",{ qr: qr, long: long})
-
-  } catch(e){
-    console.log(e)
-    res.status(500).json("Error") 
+    const { dato } = req.body;
+    const pool = await dbConnection();
+    const result = await pool.request().input("IN_QR", dato).execute(copaArg);
+    const qr = result.recordsets[0];
+    console.log(qr);
+    let long = qr.length;
+    long !== 0 ? (long = 1) : null;
+    console.log("pasa por aca");
+    console.log(long);
+    res.render("resultcopaarg", { qr: qr, long: long });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json("Error");
   }
-}
+};
+const copaArg2SP = async (req, res) => {
+  try {
+    const { dato } = req.body;
+    const pool = await dbConnection();
+    const result = await pool.request().input("IN_QR", dato).execute(copaArg);
+    const qr = result.recordsets[0];
+    console.log(qr);
+    let long = qr.length;
+    long !== 0 ? (long = 1) : null;
+    res.render("resultcopaarg2", { qr: qr, long: long });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json("Error");
+  }
+};
 module.exports = {
   ingresoCajas,
   cajasSP,
@@ -374,4 +385,5 @@ module.exports = {
   ingresoCopaArg2,
   copaArgSP,
   copaArg2SP,
+  countSP,
 };
