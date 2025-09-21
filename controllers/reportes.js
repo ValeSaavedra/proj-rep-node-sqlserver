@@ -24,28 +24,46 @@ const {
 const { conviertoFecha } = require("../utils/scripts");
 
 const { countCSV } = require("../utils/scripts");
+const { isFileToday } = require("../utils/scripts");
+const { isObjEmpty } = require("../utils/scripts");
+const { deleteFilesCSVSync } = require("../utils/scripts");
 //const { execFileSync } = require("child_process");
 //const { json } = require("express");
 //const { date } = require("joi");
 
 const countSP = (req, res) => {
-  //console.log(countCSV);
-  const fs = require("fs");
-  const FOLDER_TO_MAP = "../proj-rep-node-sqlserver";
-  const files = fs.readdirSync(FOLDER_TO_MAP);
-
-  const conteo = files.reduce((acc, file) => {
-    if (file.endsWith(".csv")) {
-      const grupo = file.split("_")[0];
-
-      // si acc[grupo] es undefined o null → usa 0
-      acc[grupo] = (acc[grupo] ?? 0) + 1;
-    }
-    return acc;
-  }, {});
+  const conteo = countCSV();
   console.log(conteo);
-  console.log(conteo.reca);
-  res.send(conteo);
+  let long;
+
+  isObjEmpty(conteo) ? (long = 0) : (long = 1);
+
+  const data = Object.entries(conteo).map(([archivo, cantidad]) => ({
+    archivo,
+    cantidad,
+  }));
+  console.log(data);
+
+  res.render("adepurar", {
+    long: long,
+    data: data,
+  });
+};
+
+const depuraSP = (req, res) => {
+  deleteFilesCSVSync();
+  console.log("Llegó bien al post de depura");
+  res.redirect("/reportes/depura");
+  /*
+  const conteo = countCSV();
+  let long;
+  isObjEmpty(conteo) ? (long = 0) : (long = 1);
+  const data = Object.entries(conteo).map(([archivo, cantidad]) => ({
+    archivo,
+    cantidad,
+  }));
+  res.render("adepurar", { long: long, data: data });
+  */
 };
 
 const descargoCSV = (req, res) => {
@@ -386,4 +404,5 @@ module.exports = {
   copaArgSP,
   copaArg2SP,
   countSP,
+  depuraSP,
 };

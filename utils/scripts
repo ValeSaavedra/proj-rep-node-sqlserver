@@ -65,16 +65,40 @@ const countCSV = () => {
 
   const conteo = files.reduce((acc, file) => {
     if (file.endsWith(".csv")) {
-      const grupo = file.split("_")[0];
+      const arrSep = file.split("_");
+      const grupo = arrSep[0];
+      const fecha = arrSep[1];
 
       // si acc[grupo] es undefined o null → usa 0
-      acc[grupo] = (acc[grupo] ?? 0) + 1;
+      if (!isFileToday(fecha)) acc[grupo] = (acc[grupo] ?? 0) + 1;
     }
     return acc;
   }, {});
-  //});
-  //return conteo;
+
+  return conteo;
 };
+const deleteFilesCSVSync = () => {
+  const fs = require("fs").promises;
+  const FOLDER_TO_MAP = "../proj-rep-node-sqlserver";
+  fs.readdir(FOLDER_TO_MAP)
+    .then((files) => {
+      const unlinkPromises = files.map((file) => {
+        if (file.endsWith(".csv")) {
+          const fecha = file.split("_")[1];
+          if (!isFileToday(fecha)) return fs.unlink(file);
+        }
+      });
+      return Promise.all(unlinkPromises);
+    })
+    .catch((err) => {
+      console.log("Algo anduvo mal");
+    });
+};
+const isObjEmpty = (obj) => {
+  //Object.keys(objeto).length === 0
+  return Object.keys(obj).length === 0;
+};
+
 const deleteFilesCSV = (ruta) => {
   /*
   const fs = require("fs");
@@ -109,4 +133,7 @@ module.exports = {
   conviertoFecha,
   deleteFilesCSV,
   countCSV,
+  isFileToday,
+  isObjEmpty,
+  deleteFilesCSVSync,
 };
