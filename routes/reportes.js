@@ -22,6 +22,8 @@ const {
   copaArg2SP,
   ingresopagos,
   pagosSP,
+  ingresodeuda,
+  deudaSP,
 } = require("../controllers/reportes");
 const { validateNum, validateQR } = require("../middlewares/actions/accessNum");
 
@@ -37,6 +39,7 @@ router.get("/temporada/descargar/:archivo", descargoCSV);
 router.post("/deportes", validateNum, accDeportesSP);
 router.post("/accesos", validateNum, accesosSP);
 router.post("/pagos", validateNum, pagosSP);
+router.post("/deuda", validateNum, deudaSP);
 //router.post("/copaarg",validateQR, copaArgSP)
 router.post("/copaarg", copaArgSP);
 router.post("/copaarg2", validateQR, copaArg2SP);
@@ -47,6 +50,7 @@ router.get("/abonos", abonosSP);
 router.get("/deportes", ingresoaccDeportes);
 router.get("/accesos", ingresoaccesos);
 router.get("/pagos", ingresopagos);
+router.get("/deuda", ingresodeuda);
 router.get("/copaarg", ingresoCopaArg);
 router.get("/copaarg2", ingresoCopaArg2);
 router.get("/reca", recaSP);

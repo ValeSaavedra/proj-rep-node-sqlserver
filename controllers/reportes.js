@@ -15,6 +15,7 @@ const {
   temporada,
   copaArg,
   pagos,
+  deuda,
 } = require("../models/reportes");
 const {
   sucursalLiteral,
@@ -194,6 +195,30 @@ const pagosSP = async (req, res) => {
     long !== 0 ? (long = 1) : null;
     console.log("long tiene", long);
     res.render("resultpagos", { socio: socio, long: long });
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500).json("Error");
+  }
+};
+
+const ingresodeuda = (req, res) => {
+  res.render("ingresodeuda");
+};
+
+const deudaSP = async (req, res) => {
+  try {
+    const { dato } = req.body;
+    const pool = await dbConnection();
+    const result = await pool
+      .request()
+      .input("IN_Soc_DNI", dato)
+      .execute(deuda);
+    const socio = result.recordsets[0];
+    let long = socio.length;
+    console.log(`long tiene una longitud de ${long}`);
+    long !== 0 ? (long = 1) : null;
+    console.log("long tiene", long);
+    res.render("resultdeuda", { socio: socio, long: long });
   } catch (e) {
     console.log(e);
     res.sendStatus(500).json("Error");
@@ -390,4 +415,6 @@ module.exports = {
   copaArg2SP,
   ingresopagos,
   pagosSP,
+  ingresodeuda,
+  deudaSP,
 };

@@ -11,6 +11,7 @@ const colonia = "CPUJ_ALE_Cajas_Colonia";
 const temporada = "CPUJ_ALE_Cajas_Temporada";
 const copaArg = "CPUJ_ALE_Cajas_QRCopaArg";
 const pagos = "CPUJ_ALE_Cajas_HistoriaPagos";
+const deuda = "CPUJ_ALE_Cajas_Deuda";
 
 module.exports = {
   cajasCobros,
@@ -26,4 +27,5 @@ module.exports = {
   temporada,
   copaArg,
   pagos,
+  deuda,
 };
