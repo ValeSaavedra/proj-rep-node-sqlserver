@@ -20,8 +20,10 @@ const {
   copaArgSP,
   ingresoCopaArg2,
   copaArg2SP,
+  ingresopagos,
+  pagosSP,
 } = require("../controllers/reportes");
-const { validateNum,validateQR } = require("../middlewares/actions/accessNum");
+const { validateNum, validateQR } = require("../middlewares/actions/accessNum");
 
 router.get("/cajas/descargar/:archivo", descargoCSV);
 router.get("/abonos/descargar/:archivo", descargoCSV);
@@ -34,17 +36,19 @@ router.get("/colonia/descargar/:archivo", descargoCSV);
 router.get("/temporada/descargar/:archivo", descargoCSV);
 router.post("/deportes", validateNum, accDeportesSP);
 router.post("/accesos", validateNum, accesosSP);
+router.post("/pagos", validateNum, pagosSP);
 //router.post("/copaarg",validateQR, copaArgSP)
-router.post("/copaarg", copaArgSP)
-router.post("/copaarg2",validateQR,copaArg2SP)
+router.post("/copaarg", copaArgSP);
+router.post("/copaarg2", validateQR, copaArg2SP);
 router.post("/cajas", cajasSP);
 router.post("/deportes", accDeportesSP);
 router.get("/cajas", ingresoCajas);
 router.get("/abonos", abonosSP);
 router.get("/deportes", ingresoaccDeportes);
 router.get("/accesos", ingresoaccesos);
-router.get("/copaarg",ingresoCopaArg)
-router.get("/copaarg2",ingresoCopaArg2)
+router.get("/pagos", ingresopagos);
+router.get("/copaarg", ingresoCopaArg);
+router.get("/copaarg2", ingresoCopaArg2);
 router.get("/reca", recaSP);
 router.get("/abopopu", abopopuSP);
 router.get("/poli", poliSP);
