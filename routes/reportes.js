@@ -24,6 +24,8 @@ const {
   pagosSP,
   ingresodeuda,
   deudaSP,
+  depuraSP,
+  countSP,
 } = require("../controllers/reportes");
 const { validateNum, validateQR } = require("../middlewares/actions/accessNum");
 
@@ -45,6 +47,7 @@ router.post("/copaarg", copaArgSP);
 router.post("/copaarg2", validateQR, copaArg2SP);
 router.post("/cajas", cajasSP);
 router.post("/deportes", accDeportesSP);
+router.post("/depura", depuraSP);
 router.get("/cajas", ingresoCajas);
 router.get("/abonos", abonosSP);
 router.get("/deportes", ingresoaccDeportes);
@@ -60,5 +63,6 @@ router.get("/reca2", reca2SP);
 router.get("/recapoli", recaPoliSP);
 router.get("/colonia", coloniaSP);
 router.get("/temporada", temporadaSP);
+router.get("/depura", countSP);
 
 module.exports = router;

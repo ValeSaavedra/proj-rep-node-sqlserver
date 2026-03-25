@@ -57,6 +57,47 @@ const isFileToday = (fileDateSt) => {
   );
   return fileDate == hoyDate;
 };
+const countCSV = () => {
+  // copio esta función para hacerla directo en controller - por ello nunca la llamo
+  const fs = require("fs");
+  const FOLDER_TO_MAP = "../proj-rep-node-sqlserver";
+  const files = fs.readdirSync(FOLDER_TO_MAP);
+
+  const conteo = files.reduce((acc, file) => {
+    if (file.endsWith(".csv")) {
+      const arrSep = file.split("_");
+      const grupo = arrSep[0];
+      const fecha = arrSep[1];
+
+      // si acc[grupo] es undefined o null → usa 0
+      if (!isFileToday(fecha)) acc[grupo] = (acc[grupo] ?? 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  return conteo;
+};
+const deleteFilesCSVSync = () => {
+  const fs = require("fs").promises;
+  const FOLDER_TO_MAP = "../proj-rep-node-sqlserver";
+  fs.readdir(FOLDER_TO_MAP)
+    .then((files) => {
+      const unlinkPromises = files.map((file) => {
+        if (file.endsWith(".csv")) {
+          const fecha = file.split("_")[1];
+          if (!isFileToday(fecha)) return fs.unlink(file);
+        }
+      });
+      return Promise.all(unlinkPromises);
+    })
+    .catch((err) => {
+      console.log("Algo anduvo mal");
+    });
+};
+const isObjEmpty = (obj) => {
+  //Object.keys(objeto).length === 0
+  return Object.keys(obj).length === 0;
+};
 
 const deleteFilesCSV = (ruta) => {
   /*
@@ -82,7 +123,8 @@ const deleteFilesCSV = (ruta) => {
     )
       fs.unlinkSync(file);
   });
-*/};
+*/
+};
 
 module.exports = {
   sucursalLiteral,
@@ -90,4 +132,8 @@ module.exports = {
   conviertoJson2CSV,
   conviertoFecha,
   deleteFilesCSV,
+  countCSV,
+  isFileToday,
+  isObjEmpty,
+  deleteFilesCSVSync,
 };

@@ -24,9 +24,49 @@ const {
   conviertoJson2CSV,
 } = require("../utils/scripts");
 const { conviertoFecha } = require("../utils/scripts");
+
+const { countCSV } = require("../utils/scripts");
+const { isFileToday } = require("../utils/scripts");
+const { isObjEmpty } = require("../utils/scripts");
+const { deleteFilesCSVSync } = require("../utils/scripts");
 //const { execFileSync } = require("child_process");
 //const { json } = require("express");
 //const { date } = require("joi");
+
+const countSP = (req, res) => {
+  const conteo = countCSV();
+  console.log(conteo);
+  let long;
+
+  isObjEmpty(conteo) ? (long = 0) : (long = 1);
+
+  const data = Object.entries(conteo).map(([archivo, cantidad]) => ({
+    archivo,
+    cantidad,
+  }));
+  console.log(data);
+
+  res.render("adepurar", {
+    long: long,
+    data: data,
+  });
+};
+
+const depuraSP = (req, res) => {
+  deleteFilesCSVSync();
+  console.log("Llegó bien al post de depura");
+  res.redirect("/reportes/depura");
+  /*
+  const conteo = countCSV();
+  let long;
+  isObjEmpty(conteo) ? (long = 0) : (long = 1);
+  const data = Object.entries(conteo).map(([archivo, cantidad]) => ({
+    archivo,
+    cantidad,
+  }));
+  res.render("adepurar", { long: long, data: data });
+  */
+};
 
 const descargoCSV = (req, res) => {
   const { archivo } = req.params;
@@ -417,4 +457,6 @@ module.exports = {
   pagosSP,
   ingresodeuda,
   deudaSP,
+  countSP,
+  depuraSP,
 };
